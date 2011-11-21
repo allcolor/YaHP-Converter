@@ -8,8 +8,19 @@ Please contact the creator of YAHP at <quentin.anciaux@advalvas.be> if you have 
 
 ## Changelog
 
+### 1.3 (21/11/2011)
+* Updated third party libraries to their latest or most compliant version:
+    * [Flying Saucer](http://code.google.com/p/flying-saucer/): [16/04/2011](https://github.com/flyingsaucerproject/flyingsaucer/commits/91762973ba583e84e5d84f2da14ea9279a29462c)
+    * [iText](http://itextpdf.com/): 2.1.7
+    * [Apache Log4j](http://logging.apache.org/log4j/): 1.2.16
+    * [JTidy](http://jtidy.sourceforge.net/): r938
+    * [Shanidom](http://sourceforge.net/projects/shanidom/): 1.4.17
+    * [Jaxen](http://jaxen.codehaus.org/): 1.1.1
+* Removed Apache Commons IO and Apache Commons Log libraries which are not needed any more.
+* Removed extra calls in charge of adding a document producer since they are not applicable any more and got rid of deprecated constants.
+
 ### 1.2.20c (10/05/2011)
-* Revert to previous itext and flying saucer librairies due to licensing problem. This version is LGPL
+* Revert to previous itext and flying saucer librairies due to licensing problem. This version is LGPL.
 
 ### 1.2.20b (17/01/2011)
 * Do not validate html and do not### xhtml DTD from w3 site (thanks to Johnathan Crawford).
