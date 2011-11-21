@@ -1,0 +1,522 @@
+<html>
+  	<head>
+    		<title>YaHP Converter</title>
+  		<link rel="stylesheet" href="style.css" type="text/css" />
+	</head>
+  	<body>
+		<center>
+		<div class="messageBox" >
+			<center>
+                            <h1><a href="yahp-v1.2.20c.tar.gz" >YaHP Converter</a> (Yet another Html to Pdf converter) <a href="yahp-v1.2.20c.tar.gz" >v1.2.20c</a> (10/05/2011)</h1>
+			    <p>&nbsp;<span style="color: red">New 17/01/2011!</span><a href="samples/dlfp.pdf" >Sample Da Linux French Page</a></p>
+			</center>
+			<br />
+			<p>&nbsp;YaHP is a java library which permits to convert an html document into a pdf document.</p>
+			<br/>
+			<p>&nbsp;YaHP is licensed under the LGPL (GNU).</p>
+			<br />
+			<p>&nbsp;YaHP use a pluggable renderer system.</p>
+			<p>It had in previous versions 4 renderer, in the 1.2.19 and 1.2.19a version only the renderer based on <a href="https://xhtmlrenderer.dev.java.net/">flying saucer</a> is available. Jar is now smaller.</p>
+			<ul>
+				<li>The flying saucer renderer, good rendering, can set header/footer in html, choose page size.</li>
+			</ul>
+			<div style="font-size: 8px">
+			<p>Old renderer properties (not available in 1.2.19):</p>
+			<ul>
+				<li>The swing renderer, most stable, good rendering, can set header/footer, choose page size.</li>
+				<li>The OpenOffice.org renderer, average rendering, cannot set header footer nor page size.(worst renderer)</li>
+				<li>The firefox renderer, best rendering, can set header/footer, choose page size, must patch and compile a version of firefox, tested only on linux. Download pre-compiled version of the patched firefox (compiled on ubuntu dapper)<a href="mozilla-print.tar.gz">mozila-print.tar.gz (08/04/2006)</a></li>
+			</ul>
+			<p>To use the openoffice.org renderer, you must first launch openoffice in listen mode like this: <blockquote>oowriter "-accept=socket,port=8100;urp;"</blockquote> (with the quotes), then set the correct properties (see CSimpleConversion.java).</p>
+			<p>To use the firefox renderer, you must first download the firefox source : firefox-1.5.0.1-source.tar.bz2 at http://www.mozilla.org/ , then patch it with the files  <a href="layout.printing.nsPrintEngine.diff">"layout.printing.nsPrintEngine.diff"</a> and <a href="layout.printing.nsPrintEngineH.diff">"layout.printing.nsPrintEngineH.diff"</a>, then compile it by issuing : <blockquote>"./configure --prefix=/yourchoosenpath/mozilla-print/ --disable-logging --disable-tests --disable-oji --disable-view-source --disable-accessibility --disable-composer --disable-ldap --enable-canvas --disable-gnomeui --enable-application=browser --with-user-appdir=.print.mozilla --enable-system-cairo", then "make install"</blockquote></p>
+			<p>Copy the sh script <a href="fireprint">"fireprint"</a> in /yourchoosenpath/mozilla-print/, modify the path inside the script, then set the correct properties (see CSimpleConversion.java). --script refer to the path /yourchoosenpath/mozilla-print/fireprint.</p>
+			<p>You also need ps2pdf installed and in the path.</p>
+			</div>
+                        <p>&nbsp;<span style="color: red">New 21/03/2009!</span><a href="samples/test2.pdf" >Sample pdf with colors/tables/fonts embedded/alignment/non-latin alphabet</a> <span style="color: red">New !</span> <a href="samples/test2.html">source</a></p>
+                        <p>&nbsp;<span style="color: red">New 21/03/2009!</span><a href="samples/example.pagebreak.pdf" >Sample pdf with pagebreaks</a></p>
+                        <p>&nbsp;<a href="samples/example.pagebreak.html" >Sample html with pagebreaks (use to generate the previous pdf)</a></p>
+                        <p>&nbsp;<span style="color: red">New 21/03/2009!</span><a href="samples/example.tablerow.pdf" >Sample pdf with listing tables with automatic row break</a></p>
+                        <p>&nbsp;<a href="samples/example.tablerow.html" >Sample html with listing tables with automatic row break (use to generate the previous pdf)</a></p>
+                        <p>&nbsp;<span style="color: red">New 21/03/2009!</span><a href="samples/watermark.pdf" >Sample pdf with watermark</a></p>
+                        <p>&nbsp;<a href="samples/watermark.html" >Sample html with watermark (use to generate the previous pdf)</a></p>
+                        <p>&nbsp;<a href="samples/watermark.png" >Sample image used as watermark (use to generate the previous pdf)</a></p>
+			<p>&nbsp;<span style="color: red">New 18/03/2009!</span><a href="samples/freshmeat.pdf" >Sample Freshmeat</a></p>
+			<p>&nbsp;<span style="color: red">New 21/03/2009!</span><a href="samples/thissite.pdf" >Sample This page</a></p>
+			<p>&nbsp;<a href="doc/index.html" >Javadoc</a></p>
+			<div style="text-align: left;position: relative;left: 40px;">
+			<h2>Getting started</h2>
+			<p>Copy the yahp.jar in $YAHP_HOME/YaHPSample/lib/yahp.jar in the classpath.</b>
+			<p>Or rebuild it by issuing 'ant' in $YAHP_HOME/YaHPConverter/ the jar will be in $YAHP_HOME/YaHPConverter/Run after the build.</p>
+			<p>Example usage: (see CSimpleConversion.java)</p>
+			</div>
+			<pre style="text-align: left;font-size: 12pt;border: 2px solid black;">
+	// new converter
+	CYaHPConverter converter = new CYaHPConverter();
+	// save pdf in outfile
+	File fout = new File(outfile);
+	FileOutputStream out = new FileOutputStream(fout);
+	// contains configuration properties
+	Map properties = new HashMap();
+	// list containing header/footer
+	List			 headerFooterList = new ArrayList();
+	// add header/footer
+	headerFooterList.add(new IHtmlToPdfTransformer.CHeaderFooter(
+			"&lt;table width=\"100%\"&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td align=\"left\"&gt;"+
+			"Generated with YaHPConverter.&lt;/td&gt;&lt;td align=\"right\"&gt;Page &lt;pagenumber&gt;/&lt;"+
+			"pagecount&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;",
+			IHtmlToPdfTransformer.CHeaderFooter.HEADER));
+	headerFooterList.add(new IHtmlToPdfTransformer.CHeaderFooter(
+			"© 2009 Quentin Anciaux",
+			IHtmlToPdfTransformer.CHeaderFooter.FOOTER));
+	properties.put(IHtmlToPdfTransformer.PDF_RENDERER_CLASS,
+			IHtmlToPdfTransformer.FLYINGSAUCER_PDF_RENDERER);
+	properties.put(IHtmlToPdfTransformer.FOP_TTF_FONT_PATH, fontPath);
+	converter.convertToPdf(new URL(url),
+		IHtmlToPdfTransformer.A4P, headerFooterList, out,
+		properties);
+	out.flush();
+	out.close();
+			</pre>
+			<br />
+			<p>To change the page size after a page break, set the attribute "size" of the &lt;yahp:pb /&gt; attribute. Example:<p>
+			<ul>
+				<li>&lt;yahp:pb size="A4L"/&gt;</li>
+				<li>&lt;yahp:pb size="29.7,21"/&gt;</li>
+				<li>&lt;yahp:pb size="21,29.7,1"/&gt;</li>
+				<li>&lt;yahp:pb size="21,29.7,1,0.5,0.5,1"/&gt;</li>
+			</ul>
+			<br />
+                        <p>&nbsp;<a href="yahp-v1.2.20c.tar.gz" ><img src="yahplogo.png" />&nbsp; <h4><u>!! Download v1.2.20c (tar.gz) - 10/05/2011 !!</u></h4></a></p>
+                        <h3>Changes:</h3>
+                        <ul>
+			    <li>Revert to previous itext and flying saucer librairies due to licensing problem. This version is LGPL</li>
+                        </ul>
+                        <p>&nbsp;<a href="yahp-v1.2.20b.tar.gz" >Download v1.2.20b (tar.gz) - 17/01/2011</a></p>
+                        <h3>Changes:</h3>
+                        <ul>
+			    <li><b><h4>!!!! ATTENTION due to the fact that new itext 5.0.5 is licensed under AGPL, the whole distribution is therefore also licensed under AGPL only the source code of YAHP is LGPL !!!!</h4></b></li>
+			    <li>Do not validate html and do not download xhtml DTD from w3 site. (thanks to Johnathan Crawford)</li>
+			    <li>Bug correction in entities normalization.</li>
+			    <li>Inline remote css into a style element inside the document.</li>
+			    <li>Updated itext and flying saucer librairies to latest version. (thanks to Johnathan Crawford)</li>
+                        </ul>
+                        <p>&nbsp;<a href="yahp-v1.2.20a.tar.gz" >Download v1.2.20a (tar.gz) - 18/12/2009</a></p>
+                        <h3>Changes:</h3>
+                        <ul>
+			    <li>Fix a problem with multiple text node copy by jtidy.</li>
+			    <li>Updated jars.</li>
+			    <li>Remove numerous "INFO" default logging to the console.</li>
+                        </ul>
+                        <p>&nbsp;<a href="yahp-v1.2.20.tar.gz" >Download v1.2.20 (tar.gz) - 17/12/2009</a></p>
+                        <h3>Changes:</h3>
+                        <ul>
+			    <li>Better handling of ms word generated html.</li>
+			    <li>Html document is normalized (entities are translated in characters) before rendering.</li>
+			    <li>Handle page break tag even if namespace declaration is missing</li>
+                        </ul>
+                        <p>&nbsp;<a href="yahp-v1.2.19d.tar.gz" >Download v1.2.19d (tar.gz) - 16/06/2009</a></p>
+                        <h3>Changes:</h3>
+                        <ul>
+			    <li>Allow multiple threads to concurrently use the same CYaHPConverter object instead of serializing access (or using one CYaHPConverter object per thread).</li>
+                        </ul>
+                        <p>&nbsp;<a href="yahp-v1.2.19c.tar.gz" >Download v1.2.19c (tar.gz) - 07/05/2009</a></p>
+                        <h3>Changes:</h3>
+                        <ul>
+			    <li>Can change page size and orientation after a page break.</li>
+			    <li>If the title tag is set in the html, it is used for the pdf title.</li>
+			    <li>Added LEGAL and LETTER constant for page size</li>
+                        </ul>
+                        <p>&nbsp;<a href="yahp-v1.2.19b.tar.gz" >Download v1.2.19b (tar.gz) - 01/05/2009</a></p>
+                        <h3>Changes:</h3>
+                        <ul>
+			    <li>Fixed Out Of Memory Error when a textarea was present in the html source.</li>
+                        </ul>
+                        <p>&nbsp;<a href="yahp-v1.2.19a.tar.gz" >Download v1.2.19a (tar.gz) - 18/03/2009</a></p>
+                        <h3>Changes:</h3>
+                        <ul>
+			    <li>Fixed incorrect page size when a page break is inserted.</li>
+                        </ul>
+                        <p>&nbsp;<a href="yahp-v1.2.19.tar.gz" >Download v1.2.19 (tar.gz) - 13/03/2009</a></p>
+                        <h3>Changes:</h3>
+                        <ul>
+			    <li>Header and Footer can contain html.</li>
+			    <li>Updated samples.</li>
+			    <li>Removed old renderers</li>
+                        </ul>
+                        <p>&nbsp;<a href="yahp-v1.2.18c.tar.gz" >Download v1.2.18c (tar.gz) - 07/07/2008</a></p>
+                        <h3>Changes:</h3>
+                        <ul>
+			    <li>Rendering of form components (textfield, textarea, combo, radiobutton, checkbox, button , listbox) in the flying saucer renderer</li>
+			    <li>Corrected double encoding of &amp;, &lt; and &gt;</li>
+			    <li>Normalize html entity before rendering</li>
+			    <li>known bug: Header/footer rendering does not works in headless mode for the flying saucer renderer</li>
+			    <li>Updated samples.</li>
+		            <li>Code cleanup</li>
+                        </ul>
+                        <p>&nbsp;<a href="yahp-v1.2.18b.tar.gz" >Download v1.2.18b (tar.gz) - 05/07/2008</a></p>
+                        <h3>Changes:</h3>
+                        <ul>
+			    <li>Tested with j2se 1.4.2.</li>
+                        </ul>
+                        <p>&nbsp;<a href="yahp-v1.2.18a.tar.gz" >Download v1.2.18a (tar.gz) - 04/07/2008</a></p>
+                        <h3>Changes:</h3>
+                        <ul>
+			    <li>Better rendering of tags soup.</li>
+                        </ul>
+                        <p>&nbsp;<a href="#" onclick="alert('not available anymore');" >Download v1.2.18 (tar.gz) - 04/07/2008</a></p>
+                        <h3>Changes:</h3>
+                        <ul>
+			    <li>Clean up, ensure compat with jdk 1.5.</li>
+			    <li>Updated samples.</li>
+                        </ul>
+                        <p>&nbsp;<a href="#" onclick="alert('not available anymore');" >Download v1.2.18-pre1 (tar.gz) - 01/07/2008</a></p>
+                        <h3>Changes:</h3>
+                        <ul>
+			    <li>Added flying saucer xhtml renderer.</li>
+			    <li>Updated samples.</li>
+                        </ul>
+                        <p>&nbsp;<a href="#" onclick="alert('not available anymore');" >Download v1.2.17 (tar.gz) - 02/07/2007</a></p>
+                        <h3>Changes:</h3>
+                        <ul>
+			    <li>Fixed a NPE if the FOP_TTF_FONT_PATH properties is not set.</li>
+                        </ul>
+                        <p>&nbsp;<a href="#" onclick="alert('not available anymore');" >Download v1.2.16 (tar.gz) - 19/06/2007</a></p>
+                        <h3>Changes:</h3>
+                        <ul>
+			    <li>Font embedding does not need anymore the fonts to be in the OS system fonts folder in jdk &lt; 1.6 on windows OSs.(Thanks to Takis Bouyouris)</li>
+                        </ul>
+                        <p>&nbsp;<a href="#" onclick="alert('not available anymore');" >Download v1.2.15 (tar.gz) - 17/06/2007</a></p>
+                        <h3>Changes:</h3>
+                        <ul>
+			    <li>Font embedding does not need anymore the fonts to be in the OS system fonts folder in jdk &lt; 1.6.</li>
+                        </ul>
+                        <p>&nbsp;<a href="#" onclick="alert('not available anymore');" >Download v1.2.14 (tar.gz) - 15/06/2007</a></p>
+                        <h3>Changes:</h3>
+                        <ul>
+                            <li>Sometimes the font embedding was still not working while running inside tomcat, this bug has been fixed.</li>
+			    <li>Works again in headless mode.</li>
+			    <li>Font embedding does not need anymore the fonts to be in the OS system fonts folder.</li>
+                        </ul>
+                        <p>&nbsp;<a href="#" onclick="alert('not available anymore');" >Download v1.2.13 (tar.gz) - 13/06/2007</a></p>
+                        <h3>Changes:</h3>
+                        <ul>
+                            <li>Fix bug: The font embedding was not working while running inside tomcat. (Thanks to Takis Bouyouris)</li>
+			    <li>Fix bug: Sometimes when running inside tomcat, the following error occured: 'UIDefaults.getUI() failed: no ComponentUI class for: javax.swing.JTextPane'. (Thanks to Takis Bouyouris)</li>
+                        </ul>
+                        <p>&nbsp;<a href="#" onclick="alert('not available anymore');" >Download v1.2.12 (tar.gz) - 11/06/2007</a></p>
+                        <h3>Changes:</h3>
+                        <ul>
+                            <li>Removed the method "getResources" from the classloader, because this method is marked as final in 1.4 JVM and so did break compatibility of yahp with 1.4 vm.</li>
+                        </ul>
+                        <p>&nbsp;<a href="#" onclick="alert('not available anymore');" >Download v1.2.11 (tar.gz) - 11/05/2007</a></p>
+                        <h3>Changes:</h3>
+                        <ul>
+                            <li>Updated classloader.</li>
+                            <li>Use current DPI screen settings to calculate page size.</li>
+                        </ul>
+                        <p>&nbsp;<a href="#" onclick="alert('not available anymore');" >Download v1.2.10 (tar.gz) - 26/04/2007</a></p>
+                        <h3>Changes:</h3>
+                        <ul>
+                            <li>Updated parser to ShaniXmlParser-v1.4.16.</li>
+                            <li>Updated xalan.</li>
+                        </ul>
+                        <p>&nbsp;<a href="#" onclick="alert('not available anymore');" >Download v1.2.9 (tar.gz) - 24/04/2007</a></p>
+                        <h3>Changes:</h3>
+                        <ul>
+                            <li>Updated parser to ShaniXmlParser-v1.4.15.</li>
+                            <li>The swing renderer can now render fieldset and legend tags.</li>
+                        </ul>
+                        <p>&nbsp;<a href="#" onclick="alert('not available anymore');" >Download v1.2.8 (tar.gz) - 19/04/2007</a></p>
+                        <h3>Changes:</h3>
+                        <ul>
+                            <li>Updated parser to ShaniXmlParser-v1.4.14.</li>
+                        </ul>
+                        <p>&nbsp;<a href="#" onclick="alert('not available anymore');" >Download v1.2.7 (tar.gz) - 13/04/2007</a></p>
+                        <h3>Changes:</h3>
+                        <ul>
+                            <li>v1.2.6 was broken in application server environment.</li>
+                        </ul>
+                        <p>&nbsp;v1.2.6 (tar.gz) - 13/04/2007  (NUKED)</p>
+                        <h3>Changes:</h3>
+                        <ul>
+                            <li>Use FOP 0.93.</li>
+                            <li>Can now embed automatically TrueType font by giving a path where TTF files are located with the yahp parameter IHtmlToPdfTransformer.FOP_TTF_FONT_PATH.</li>
+                            <li>The page-break &lt;yahp:pb&gt; works again.</li>
+                            <li>Updated samples PDF for the swing renderer.</li>
+                            <li>Updated javadoc.</li>
+                        </ul>
+                        <p>&nbsp;<a href="#" onclick="alert('not available anymore');" >Download v1.2.5 (tar.gz) - 12/04/2007</a></p>
+                        <h3>Changes:</h3>
+                        <ul>
+                            <li>Corrected PageSize class where bottom margin was set incorrectly in CM.</li>
+                            <li>Corrected support for accentuated letters.</li>
+                            <li>Updated classloading mechanism.</li>
+                            <li>Corrected incorrect page count on some html.</li>
+                        </ul>
+                        <p>&nbsp;<a href="#" onclick="alert('not available anymore');" >Download v1.2.4 (tar.gz) - 11/04/2007</a></p>
+                        <h3>Changes:</h3>
+                        <ul>
+                            <li>Remove infinite loop in the css parser.</li>
+                            <li>Tidyfy html before sending to rendering.</li>
+                            <li>Corrected a class cast exception in the swing border helper.</li>
+                            <li>If base url not set, take base tag as base url if found.</li>
+                        </ul>
+                        <p>&nbsp;<a href="#" onclick="alert('not available anymore');" >Download v1.2.3 (tar.gz) - 09/04/2007</a></p>
+                        <h3>Changes:</h3>
+                        <ul>
+                            <li>Updated xml/html parser.</li>
+                            <li>Default charset to utf-8.</li>
+                        </ul>
+                        <p>&nbsp;<a href="#" onclick="alert('not available anymore');" >Download v1.2.2 (tar.gz) - 16/03/2007</a></p>
+                        <h3>Changes:</h3>
+                        <ul>
+                            <li>Correct errors with commons-logging under tomcat on windows.</li>
+                        </ul>
+                        <p>&nbsp;<a href="#" onclick="alert('not available anymore');" >Download v1.2.1 (tar.gz) - 05/01/2007</a></p>
+                        <h3>Changes:</h3>
+                        <ul>
+                            <li>Ignore attribute's case on image tag.</li>
+                        </ul>
+                        <p>&nbsp;<a href="#" onclick="alert('not available anymore');" >Download v1.2 (tar.gz) - 07/12/2006</a></p>
+                        <h3>Changes:</h3>
+                        <ul>
+                            <li>Corrected rendering of elements with size set in percent.</li>
+                        </ul>
+                        <p>&nbsp;<a href="#" onclick="alert('not available anymore');" >Download v1.1beta2 (tar.gz) - 10/08/2006</a></p>
+                        <h3>Changes:</h3>
+                        <ul>
+                            <li>Rendering of CSS border in the swing renderer.</li>
+                            <li>Better memory usage.</li>
+                            <li>Use Shani xml parser v1.4.6.</li>
+                        </ul>
+                        <p>&nbsp;<a href="#" onclick="alert('not available anymore');" >Download v1.0 (tar.gz) - 21/07/2006</a></p>
+                        <h3>Changes:</h3>
+                        <ul>
+                            <li>Corrected non rendering of table row on edge of pages in the swing renderer.</li>
+                            <li>Better memory usage.</li>
+                            <li>Use Shani xml parser v1.4.2.</li>
+                        </ul>
+                        <p>&nbsp;<a href="#" onclick="alert('not available anymore');" >Download v0.99 (tar.gz) - 05/07/2006</a></p>
+                        <h3>Changes:</h3>
+                        <ul>
+                            <li>Corrected dissapearance of header/footer in the swing renderer.</li>
+                            <li>Better memory usage when css style is put on the document.</li>
+                        </ul>
+                        <p>&nbsp;<a href="#" onclick="alert('not available anymore');" >&nbsp;Download v0.98 (tar.gz) - 05/07/2006 (N/A)</a></p>
+                        <h3>Changes:</h3>
+                        <ul>
+                            <li>Huge memory usage improvement.</li>
+                            <li>Use Shani xml parser v1.3.8.</li>
+                        </ul>
+                        <p>&nbsp;<a href="#" onclick="alert('not available anymore');" >Download v0.97 (tar.gz) - 23/06/2006</a></p>
+                        <h3>Changes:</h3>
+                        <ul>
+                            <li>Add intelligent and automatic table rows break in the swing renderer.</li>
+                        </ul>
+                        <p>&nbsp;<a href="#" onclick="alert('not available anymore');" >Download v0.96 (tar.gz) - 19/06/2006</a></p>
+                        <h3>Changes:</h3>
+                        <ul>
+                            <li>Fix incorrect alignment with embedded fonts in the swing renderer.</li>
+                            <li>Javadoc updated.</li>
+                        </ul>
+                        <p>&nbsp;<a href="#" onclick="alert('not available anymore');" >Download v0.95 (tar.gz) - 17/06/2006</a></p>
+                        <h3>Changes:</h3>
+                        <ul>
+                            <li>Corrected incorrect right alignment of text in pdf generated by the swing renderer.</li>
+                            <li>Javadoc updated.</li>
+                        </ul>
+                        <p>&nbsp;<a href="#" onclick="alert('not available anymore');" >Download v0.94 (tar.gz) - 08/06/2006</a></p>
+                        <h3>Changes:</h3>
+                        <ul>
+                            <li>The swing renderer now has a pagebreak tag which permits to cut one document in several pages.</li>
+                            <li>Possibility to embed font with the yahp-fop-config.xml file.</li>
+                            <li>Javadoc updated.</li>
+                            <li>Sample application updated.</li>
+                        </ul>
+			<p>&nbsp;<a href="#" onclick="alert('not available anymore');" >Download v0.93 (tar.gz) - 15/04/2006</a></p>
+			<h3>Changes:</h3>
+			<ul>
+				<li>Better rendering of forms components (button, field, ...) in the swing renderer. (see widget.pdf)</li>
+				<li>List box are now rendered with the swing renderer.</li>
+				<li>Javadoc updated.</li>
+				<li>Swing renderer samples files updated.</li>
+			</ul>
+			<p>&nbsp;<a href="#" onclick="alert('not available anymore');" >Download v0.92 (tar.gz) - 14/04/2006</a></p>
+			<h3>Changes:</h3>
+			<ul>
+				<li>Rendering of forms components (button, field, ...) is now custom made in the swing renderer.</li>
+				<li>The swing renderer is two times faster.</li>
+				<li>Correct rendering of scaled page with the swing renderer.</li>
+				<li>Rendering of the content of input field and textarea with the swing renderer.</li>
+				<li>Sample application updated.</li>
+				<li>Javadoc updated.</li>
+				<li>Swing renderer samples files updated.</li>
+			</ul>
+			<p>&nbsp;<a href="#" onclick="alert('not available anymore');" >Download v0.91 (tar.gz) - 11/04/2006</a></p>
+			<h3>Changes:</h3>
+			<ul>
+				<li>Can sign a document with a certificate.</li>
+				<li>Code cleanup.</li>
+				<li>Sample application updated.</li>
+				<li>Javadoc updated.</li>
+			</ul>
+			<p>&nbsp;<a href="#" onclick="alert('not available anymore');" >Download v0.90 (tar.gz) - 08/04/2006</a></p>
+			<h3>Changes:</h3>
+			<ul>
+				<li>Corrected "drawing error" occuring in acrobat reader of samples pdf generated with the firefox renderer by using latest ghostscript and not ghostscript eps.</li>
+				<li>Ensure all buttons/combo/textfield are painted with the swing renderer.</li>
+				<li>Sample application updated.</li>
+				<li>Javadoc updated.</li>
+				<li>All samples files updated.</li>
+			</ul>
+			<p>&nbsp;<a href="#" onclick="alert('not available anymore');" >Download v0.20 (tar.gz) - 07/04/2006</a></p>
+			<h3>Changes:</h3>
+			<ul>
+				<li>Support header/footer in utf-8 with the firefox renderer.</li>
+				<li>Support concurrent rendering with the firefox renderer.</li>
+				<li>Better rendering of comboboxes and buttons with the swing renderer, they are painted as vector instead of bitmap.</li>
+				<li>Sample application updated.</li>
+				<li>Javadoc updated.</li>
+				<li>All samples files updated.</li>
+			</ul>
+                        <p>&nbsp;<a href="#" onclick="alert('not available anymore');" >Download v0.19 (tar.gz) - 05/04/2006</a></p>
+			<h3>Changes:</h3>
+			<ul>
+				<li>Can set header/footer and page size with the firefox renderer.</li>
+				<li>Recompiled iText to work on 1.4 JVM and corrected a LinkageError on 1.4 JVM.</li>
+				<li>Sample application updated to use all the new properties.</li>
+				<li>Javadoc updated.</li>
+				<li>Firefox samples files updated.</li>
+			</ul>
+                        <p>&nbsp;<a href="#" onclick="alert('not available anymore');" >Download v0.18 (tar.gz) - 02/04/2006</a></p>
+			<h3>Changes:</h3>
+			<ul>
+				<li>Added a new renderer which use firefox as html renderer.</li>
+				<li>Sample application updated to use all the new properties.</li>
+				<li>Javadoc updated.</li>
+				<li>Samples files updated.</li>
+			</ul>
+                        <p>&nbsp;<a href="#" onclick="alert('not available anymore');" >Download v0.17 (tar.gz) - 30/03/2006</a></p>
+			<h3>Changes:</h3>
+			<ul>
+				<li>Renderers are now pluggable.</li>
+				<li>Added a new renderer which use OpenOffice.org writer as pdf generator.</li>
+				<li>Sample application updated to use all the new properties.</li>
+				<li>Refactoring and cleanup of code.</li>
+				<li>Does not copy yahpxxx.jar in the temp directory anymore.</li>
+				<li>Javadoc updated.</li>
+				<li>Samples files updated.</li>
+			</ul>
+                        <p>&nbsp;<a href="#" onclick="alert('not available anymore');" >Download v0.16 (tar.gz) - 24/03/2006</a></p>
+			<h3>Changes:</h3>
+			<ul>
+				<li>Added handling of pdf encryption.</li>
+				<li>Added several properties in IHtmlToPdfTransformer interface, see javadoc.</li>
+				<li>Cleanup of code.</li>
+				<li>Updated the javadoc.</li>
+				<li>Updated to the new ShaniXmlParser 1.3.6.</li>
+				<li>All samples files updated.</li>
+			</ul>
+                        <p>&nbsp;<a href="#" onclick="alert('not available anymore');" >Download v0.15 (tar.gz) - 23/03/2006</a></p>
+			<h3>Changes:</h3>
+			<ul>
+				<li>Correct rendering of page containing chinese characters.</li>
+				<li>Better rendering of button/checkbox components.</li>
+				<li>Updated to the new ShaniXmlParser 1.3.6-pre.</li>
+				<li>Samples files updated.</li>
+			</ul>
+                        <p>&nbsp;<a href="#" onclick="alert('not available anymore');" >Download v0.14 (tar.gz) - 20/03/2006</a></p>
+			<h3>Changes:</h3>
+			<ul>
+				<li>Intelligent cutting of pages.</li>
+				<li>Better rendering of page footer.</li>
+			</ul>
+                        <p>&nbsp;<a href="#" onclick="alert('not available anymore');" >Download v0.13 (tar.gz) - 17/03/2006</a></p>
+			<h3>Changes:</h3>
+			<ul>
+				<li>Detect if rendering in the event thread and avoid calling SwingUtilities invokeAndWait in this case.</li>
+				<li>Ensure synchronized rendering of image inside the document.</li>
+				<li>Updated to the new ShaniXmlParser 1.3.5.</li>
+			</ul>
+                        <p>&nbsp;<a href="#" onclick="alert('not available anymore');" >Download v0.12 (tar.gz) - 16/11/2005</a></p>
+			<h3>Changes:</h3>
+			<ul>
+				<li>Use SwingUtilities.InvokeAndWait to synchronize with the swing paint thread.</li>
+				<li>Better rendering of page header. (page footer still rendered as image)</li>
+				<li>Samples files updated.</li>
+			</ul>
+                        <p>&nbsp;<a href="#" onclick="alert('not available anymore');" >Download v0.11 (tar.gz) - 07/11/2005</a></p>
+			<h3>Changes:</h3>
+			<ul>
+				<li>Add property "FAST_TRANSFORM" default to true, which permits to have faster transformation, but will produce black background on transparent gif under kpdf (only so far).</li>
+				<li>Circumvent a NullPointerException in JDK ParagraphView class under jdk 1.4.2</li>
+			</ul>
+                        <p>&nbsp;<a href="#" onclick="alert('not available anymore');" >Download v0.10 (tar.gz) - 02/11/2005</a></p>
+			<h3>Changes:</h3>
+			<ul>
+				<li>Set the org.apache.commons.logging.Log System property to force the use log4j instead of setting wrongly with a LogFactoryImplementation.</li>
+			</ul>
+                        <p>&nbsp;<a href="#" onclick="alert('not available anymore');" >Download v0.9 (tar.gz) - 28/10/2005</a></p>
+			<h3>Changes:</h3>
+			<ul>
+				<li>Correct rendering of comboboxes.</li>
+				<li>Correct rendering of images with transparent zone (no more black background)</li>
+				<li>Set the org.apache.commons.logging.Log System property to force the use of the default logger inside the Yahp context.</li>
+				<li>Samples files updated.</li>
+				<li>Javadoc updated</li>
+			</ul>
+                        <p>&nbsp;<a href="#" onclick="alert('not available anymore');" >Download v0.8 (tar.gz) - 26/10/2005</a></p>
+			<h3>Changes:</h3>
+			<ul>
+				<li>Corrected a memory leak in the classloader due to commons logging.</li>
+				<li>Destroy the classloader on finalization.</li>
+				<li>Added the META-INF/services/org.apache.commons.logging.LogFactory file to force the use of the default logger inside the Yahp context.</li>
+			</ul>
+                        <p>&nbsp;<a href="#" onclick="alert('not available anymore');" >Download v0.7 (tar.gz) - 23/10/2005</a></p>
+			<h3>Changes:</h3>
+			<ul>
+				<li>Remove not selected option tag from DOM.</li>
+				<li>Updated xml parser.</li>
+			</ul>
+                        <p>&nbsp;<a href="#" onclick="alert('not available anymore');" >Download v0.6 (tar.gz) - 24/09/2005</a></p>
+			<h3>Changes:</h3>
+			<ul>
+				<li>Better rendering quality.</li>
+				<li>Render directly in the pdfgraphics2d and dot not use an offscreen buffer which had bad rendering quality.</li>
+				<li>Fonts are now vectorized and not as bitmap.</li>
+				<li>Samples updated.</li>
+				<li>Javadoc updated.</li>
+			</ul>
+                        <p>&nbsp;<a href="#" onclick="alert('not available anymore');" >Download v0.5 (tar.gz) - 23/09/2005 (modified, first 0.5 has still buttons display problem, consider the first 0.5 as nuked ;)</a></p>
+			<h3>Changes:</h3>
+			<ul>
+				<li>Force HTMLEditorKit on the JTextPane used for rendering. (prevent source display)</li>
+				<li>Remove the doctype node if any before giving the source to the JTextPane</li>
+				<li>Now render correclty the Text field, buttons, combobox, ... (before was blank)</li>
+			</ul>
+                        <p>&nbsp;<a href="#" onclick="alert('not available anymore');" >Download v0.4 (tar.gz) - 22/09/2005</a></p>
+			<h3>Changes:</h3>
+			<ul>
+				<li>Remove the use of TimeoutException in the CMutex clas because this exception only exists in JDK 1.5</li>
+				<li>Set the thread context classloader to prevent Duplicate Class.</li>
+			</ul>
+                        <p>&nbsp;<a href="#" onclick="alert('not available anymore');" >Download v0.3 (tar.gz) - 21/09/2005</a></p>
+			<h3>Changes:</h3>
+			<ul>
+				<li>Document/javadoc</li>
+				<li>Set antialiasing on the graphics2d object.</li>
+				<li>handle '../' in css and image links.</li>
+			</ul>
+                        <p>&nbsp;<a href="#" onclick="alert('not available anymore');" >Download v0.2 (tar.gz)</a></p>
+			<h3>Changes:</h3>
+			<ul>
+				<li>Use a specialised classloader to load inner jar.</li>
+				<li>Compile FOP for jdk1.4 instead of 1.5.</li>
+			</ul>
+                        <p>&nbsp;<a href="#" onclick="alert('not available anymore');" >Download v0.1 (tar.gz)</a></p>
+			<br />
+			<p>&nbsp;Contact : <a href="mailto:quentin.anciaux@advalvas.be">quentin.anciaux@advalvas.be</a></p>
+		</div>
+		</center>
+	</body>
+</html>

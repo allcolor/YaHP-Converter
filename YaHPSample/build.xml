@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- ============================== -->
+<!-- Buildfile to compile yahp sample from source  -->
+<!-- ============================== -->
+
+<project name="src" default="all">
+	<property name="src" value="src"/>
+	<property name="build" value="bin"/>
+	<property name="lib" value="lib"/>
+	<property name="run" value="Run"/>
+
+	<target name="clean">
+		<delete dir="${build}"/>
+		<delete dir="${run}"/>
+	</target>
+
+	<target name="prepare">
+		<mkdir dir="${build}"/>
+		<mkdir dir="${run}"/>
+	</target>
+	
+	<target name="compile" depends="prepare" >
+		<path id="classpath">
+			<fileset dir="${lib}">
+				<include name="*" />
+			</fileset>
+		</path>
+
+		<property name="cp" refid="classpath"/>
+		<echo> Java home: ${java.home}</echo>
+		<echo> CLASSPATH: ${cp}</echo>
+
+		<javac srcdir="${src}" destdir="${build}" debug="true" target="1.4" source="1.4" >
+			<classpath refid="classpath" />
+		</javac>
+	</target>
+
+	<target name="all" depends="compile">
+		<jar jarfile="${run}/yahp-sample.jar" >
+			<fileset dir="${build}" >
+				<include name="org/allcolor/yahp/sample/*" />
+			</fileset>
+			<fileset dir="${src}" >
+				<include name="org/allcolor/yahp/sample/*" />
+			</fileset>
+		</jar>
+	</target>
+</project>

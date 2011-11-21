@@ -1,0 +1,53 @@
+<html xmlns:yahp="http://www.allcolor.org/xmlns/yahp">
+    <head>
+        <title>Test pagebreak</title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type" name="meta"></meta>
+    </head>
+    <body>
+        <h1>Testing page break...</h1>
+        <br />
+        <br />
+        <p>This is on page 1</p>
+        <yahp:pb />
+        <p>This is on page 2</p>
+        <table width="700px" border="1">
+            <thead>
+                <tr>
+                    <th>Column 1</th>
+                    <th>Column 2</th>
+                    <th>Column 3</th>
+                    <th>Column 4</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Column 1</td>
+                    <td>Column 2</td>
+                    <td>Column 3</td>
+                    <td>Column 4</td>
+                </tr>
+                <tr>
+                    <td>Column 1</td>
+                    <td>Column 2</td>
+                    <td>Column 3</td>
+                    <td>Column 4</td>
+                </tr>
+                <tr>
+                    <td>Column 1 on page 2</td>
+                    <td>Column 2 on page 2</td>
+                    <td>Column 3 on page 2</td>
+                    <td>Column 4 on page 2</td>
+                </tr>
+                <yahp:pb />
+                <tr>
+                    <td>Column 1 on page 3</td>
+                    <td>Column 2 on page 3</td>
+                    <td>Column 3 on page 3</td>
+                    <td>Column 4 on page 3</td>
+                </tr>
+            </tbody>
+        </table>
+        <yahp:pb />
+        <h1>Finally page 4</h1>
+    </body>
+</html>

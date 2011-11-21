@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="lib" path="lib/commonio-yahp.jar"/>
+	<classpathentry kind="lib" path="lib/commonlog-yahp.jar"/>
+	<classpathentry kind="lib" path="lib/log4j-yahp.jar"/>
+	<classpathentry kind="lib" path="lib/tidy-yahp.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="lib/xmlapi-yahp.jar"/>
+	<classpathentry kind="lib" path="lib/shanijar-yahp.jar"/>
+	<classpathentry kind="lib" path="lib/itext-yahp.jar"/>
+	<classpathentry kind="lib" path="lib/core-renderer-yahp.jar"/>
+	<classpathentry kind="lib" path="lib/jaxen-yahp.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

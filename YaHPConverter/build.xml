@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- ============================== -->
+<!-- Buildfile to compile yahp from source  -->
+<!-- ============================== -->
+
+<project name="src" default="all">
+	<property name="src" value="src"/>
+	<property name="build" value="bin"/>
+	<property name="lib" value="lib"/>
+	<property name="run" value="Run"/>
+
+	<target name="clean">
+		<delete dir="${build}"/>
+		<delete dir="${run}"/>
+	</target>
+
+	<target name="prepare">
+		<mkdir dir="${build}"/>
+		<mkdir dir="${run}"/>
+	</target>
+	
+	<target name="compile" depends="prepare" >
+		<path id="classpath">
+			<fileset dir="${lib}">
+				<exclude name="yahp-internal.jar" />
+			</fileset>
+		</path>
+
+		<property name="cp" refid="classpath"/>
+		<echo> Java home: ${java.home}</echo>
+		<echo> CLASSPATH: ${cp}</echo>
+
+		<javac srcdir="${src}" destdir="${build}" debug="true" target="1.4" source="1.4" >
+			<classpath refid="classpath" />
+		</javac>
+	</target>
+
+	<target name="all" depends="compile">
+		<jar compress="true" jarfile="${lib}/commonlog-yahp.jar" >
+			<fileset dir="${build}" >
+				<include name="org/apache/commons/logging/*" />
+			</fileset>
+			<fileset dir="${src}" >
+				<include name="org/apache/commons/logging/*" />
+			</fileset>
+		</jar>
+		<jar compress="true" jarfile="${lib}/yahp-internal.jar" >
+			<fileset dir="${build}" >
+				<include name="org/allcolor/yahp/cl/converter/*" />
+				<include name="org/allcolor/yahp/cl/converter/utils/*" />
+			</fileset>
+			<fileset dir="${src}" >
+				<include name="log4j.properties" />
+				<include name="org/allcolor/yahp/cl/converter/*" />
+				<include name="org/allcolor/yahp/cl/converter/utils/*" />
+				<include name="META-INF/services/*" />
+			</fileset>
+		</jar>
+		<jar compress="true" jarfile="${run}/yahp.jar" >
+			<fileset dir="${build}" >
+				<include name="org/allcolor/yahp/converter/*" />
+			</fileset>
+			<fileset dir="${src}" >
+				<include name="org/allcolor/yahp/converter/*" />
+			</fileset>
+			<fileset dir="${lib}" >
+				<include name="*.jar" />
+			</fileset>
+		</jar>
+	</target>
+</project>

@@ -1,0 +1,33 @@
+body {
+	font-family: verdana;
+	background-color: #e8e8ff;
+}
+
+img {
+	border: none;
+	vertical-align: top;
+}
+
+a {
+	text-decoration:none;
+}
+
+a:hover {
+	text-decoration: underline overline;
+	background-color: #fcfcda;
+	color: #1010da;
+}
+
+.messageBox {
+	background-color : #ffffff;
+	-moz-border-radius-topright: 20px;
+	-moz-border-radius-topleft: 20px;
+	-moz-border-radius-bottomright: 20px;
+	-moz-border-radius-bottomleft: 20px;
+	color : #303030;
+	vertical-align: top;
+	border: 1px solid black;
+	width: 98%;
+	margin-left: 1%;
+	margin-bottom: 0.5em;
+}
