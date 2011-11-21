@@ -1,15 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="lib" path="lib/commonio-yahp.jar"/>
-	<classpathentry kind="lib" path="lib/commonlog-yahp.jar"/>
-	<classpathentry kind="lib" path="lib/log4j-yahp.jar"/>
-	<classpathentry kind="lib" path="lib/tidy-yahp.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="lib/xmlapi-yahp.jar"/>
-	<classpathentry kind="lib" path="lib/shanijar-yahp.jar"/>
-	<classpathentry kind="lib" path="lib/itext-yahp.jar"/>
-	<classpathentry kind="lib" path="lib/core-renderer-yahp.jar"/>
-	<classpathentry kind="lib" path="lib/jaxen-yahp.jar"/>
+	<classpathentry kind="lib" path="lib/core-renderer.jar"/>
+	<classpathentry kind="lib" path="lib/itext-2.1.7.jar"/>
+	<classpathentry kind="lib" path="lib/jtidy-r938.jar"/>
+	<classpathentry kind="lib" path="lib/log4j-1.2.16.jar"/>
+	<classpathentry kind="lib" path="lib/shani-parser-v1.4.17.jar"/>
+	<classpathentry kind="lib" path="lib/xml-apis.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

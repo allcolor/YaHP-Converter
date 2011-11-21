@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project default="javadoc">
-<target name="javadoc">
-	<javadoc access="private" author="true" classpath="lib/commonlog-yahp.jar:lib/xmlapi-yahp.jar:lib/commonio-yahp.jar:lib/shanijar-yahp.jar:lib/log4j-yahp.jar:lib/avalon-yahp.jar:lib/batik-yahp.jar:lib/itext-yahp.jar:lib/fop-yahp.jar:lib/juh-yahp.jar:lib/jurt-yahp.jar:lib/ridl-yahp.jar:lib/unoil-yahp.jar:lib/xmlgraphics-commons-yahp.jar:lib/tidy-yahp.jar" destdir="doc" nodeprecated="false" nodeprecatedlist="false" noindex="false" nonavbar="false" notree="false" packagenames="org.allcolor.yahp.cl.converter,org.allcolor.yahp.cl.converter.swing,org.allcolor.yahp.cl.converter.firefox,org.allcolor.yahp.cl.converter.oo,org.allcolor.yahp.cl.converter.utils,org.allcolor.yahp.converter" source="1.4" sourcepath="src" splitindex="true" use="true" version="true"/>
-</target>
+<project name="javadoc" default="all">
+  <property name="doc" value="../doc"/>
+  <property name="lib" value="lib"/>
+  
+  <target name="clean">
+    <delete dir="${doc}"/>
+  </target>
+  
+  <target name="all">
+    <path id="classpath">
+      <fileset dir="${lib}" />
+    </path>
+    <javadoc access="private" author="true" destdir="${doc}" nodeprecated="false" nodeprecatedlist="false" noindex="false" nonavbar="false" notree="false" packagenames="org.allcolor.yahp.cl.converter,org.allcolor.yahp.cl.converter.utils,org.allcolor.yahp.converter" source="1.4" sourcepath="src" splitindex="true" use="true" version="true">
+      <classpath refid="classpath" />
+    </javadoc>
+  </target>
 </project>

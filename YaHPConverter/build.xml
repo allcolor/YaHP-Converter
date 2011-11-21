@@ -22,50 +22,26 @@
 	
 	<target name="compile" depends="prepare" >
 		<path id="classpath">
-			<fileset dir="${lib}">
-				<exclude name="yahp-internal.jar" />
-			</fileset>
+			<fileset dir="${lib}" />
 		</path>
-
 		<property name="cp" refid="classpath"/>
 		<echo> Java home: ${java.home}</echo>
 		<echo> CLASSPATH: ${cp}</echo>
-
 		<javac srcdir="${src}" destdir="${build}" debug="true" target="1.4" source="1.4" >
 			<classpath refid="classpath" />
 		</javac>
 	</target>
 
 	<target name="all" depends="compile">
-		<jar compress="true" jarfile="${lib}/commonlog-yahp.jar" >
-			<fileset dir="${build}" >
-				<include name="org/apache/commons/logging/*" />
-			</fileset>
-			<fileset dir="${src}" >
-				<include name="org/apache/commons/logging/*" />
-			</fileset>
-		</jar>
-		<jar compress="true" jarfile="${lib}/yahp-internal.jar" >
+		<jar compress="true" jarfile="${run}/yahp-internal.jar" >
 			<fileset dir="${build}" >
 				<include name="org/allcolor/yahp/cl/converter/*" />
 				<include name="org/allcolor/yahp/cl/converter/utils/*" />
-			</fileset>
-			<fileset dir="${src}" >
-				<include name="log4j.properties" />
-				<include name="org/allcolor/yahp/cl/converter/*" />
-				<include name="org/allcolor/yahp/cl/converter/utils/*" />
-				<include name="META-INF/services/*" />
 			</fileset>
 		</jar>
 		<jar compress="true" jarfile="${run}/yahp.jar" >
 			<fileset dir="${build}" >
 				<include name="org/allcolor/yahp/converter/*" />
-			</fileset>
-			<fileset dir="${src}" >
-				<include name="org/allcolor/yahp/converter/*" />
-			</fileset>
-			<fileset dir="${lib}" >
-				<include name="*.jar" />
 			</fileset>
 		</jar>
 	</target>
