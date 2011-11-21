@@ -68,28 +68,28 @@ public class CDocumentReconstructor {
 	private static final int getSecurityFlags(final Map properties) {
 		int securityType = 0;
 		securityType = "true".equals(properties
-				.get(IHtmlToPdfTransformer.PDF_ALLOW_PRINTING)) ? (securityType | PdfWriter.AllowPrinting)
+				.get(IHtmlToPdfTransformer.PDF_ALLOW_PRINTING)) ? (securityType | PdfWriter.ALLOW_PRINTING)
 				: securityType;
 		securityType = "true".equals(properties
-				.get(IHtmlToPdfTransformer.PDF_ALLOW_MODIFY_CONTENTS)) ? (securityType | PdfWriter.AllowModifyContents)
+				.get(IHtmlToPdfTransformer.PDF_ALLOW_MODIFY_CONTENTS)) ? (securityType | PdfWriter.ALLOW_MODIFY_CONTENTS)
 				: securityType;
 		securityType = "true".equals(properties
-				.get(IHtmlToPdfTransformer.PDF_ALLOW_COPY)) ? (securityType | PdfWriter.AllowCopy)
+				.get(IHtmlToPdfTransformer.PDF_ALLOW_COPY)) ? (securityType | PdfWriter.ALLOW_COPY)
 				: securityType;
 		securityType = "true".equals(properties
-				.get(IHtmlToPdfTransformer.PDF_ALLOW_MODIFT_ANNOTATIONS)) ? (securityType | PdfWriter.AllowModifyAnnotations)
+				.get(IHtmlToPdfTransformer.PDF_ALLOW_MODIFT_ANNOTATIONS)) ? (securityType | PdfWriter.ALLOW_MODIFY_ANNOTATIONS)
 				: securityType;
 		securityType = "true".equals(properties
-				.get(IHtmlToPdfTransformer.PDF_ALLOW_FILLIN)) ? (securityType | PdfWriter.AllowFillIn)
+				.get(IHtmlToPdfTransformer.PDF_ALLOW_FILLIN)) ? (securityType | PdfWriter.ALLOW_FILL_IN)
 				: securityType;
 		securityType = "true".equals(properties
-				.get(IHtmlToPdfTransformer.PDF_ALLOW_SCREEN_READERS)) ? (securityType | PdfWriter.AllowScreenReaders)
+				.get(IHtmlToPdfTransformer.PDF_ALLOW_SCREEN_READERS)) ? (securityType | PdfWriter.ALLOW_SCREENREADERS)
 				: securityType;
 		securityType = "true".equals(properties
-				.get(IHtmlToPdfTransformer.PDF_ALLOW_ASSEMBLY)) ? (securityType | PdfWriter.AllowAssembly)
+				.get(IHtmlToPdfTransformer.PDF_ALLOW_ASSEMBLY)) ? (securityType | PdfWriter.ALLOW_ASSEMBLY)
 				: securityType;
 		securityType = "true".equals(properties
-				.get(IHtmlToPdfTransformer.PDF_ALLOW_DEGRADED_PRINTING)) ? (securityType | PdfWriter.AllowDegradedPrinting)
+				.get(IHtmlToPdfTransformer.PDF_ALLOW_DEGRADED_PRINTING)) ? (securityType | PdfWriter.ALLOW_DEGRADED_PRINTING)
 				: securityType;
 
 		return securityType;
@@ -171,7 +171,7 @@ public class CDocumentReconstructor {
 								.get(IHtmlToPdfTransformer.PDF_ENCRYPTION_PASSWORD);
 						final int securityType = CDocumentReconstructor
 								.getSecurityFlags(properties);
-						writer.setEncryption(PdfWriter.STRENGTH128BITS,
+						writer.setEncryption(PdfWriter.STANDARD_ENCRYPTION_128,
 								password, null, securityType);
 					} // end if
 
@@ -207,11 +207,9 @@ public class CDocumentReconstructor {
 
 					if (sproducer != null) {
 						document.add(new Meta("Producer", sproducer));
-						document.addProducer(sproducer);
 					} // end if
 					else {
 						document.add(new Meta("Producer", (IHtmlToPdfTransformer.VERSION + " - http://www.allcolor.org/YaHPConverter/ - " + producer)));
-						document.addProducer((IHtmlToPdfTransformer.VERSION + " - http://www.allcolor.org/YaHPConverter/ - " + producer));
 					} // end else
 
 					// step 3: we open the document
@@ -328,7 +326,7 @@ public class CDocumentReconstructor {
 
 				if ("true".equals(properties
 						.get(IHtmlToPdfTransformer.USE_PDF_ENCRYPTION))) {
-					stp.setEncryption(PdfWriter.STRENGTH128BITS, password,
+					stp.setEncryption(PdfWriter.STANDARD_ENCRYPTION_128, password,
 							null, CDocumentReconstructor
 									.getSecurityFlags(properties));
 				} // end if
