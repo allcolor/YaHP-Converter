@@ -2,6 +2,10 @@
 
 YaHP is a Java library that allows you to convert an HTML document into a PDF document. YaHP use a pluggable renderer system. However, since the 1.2.19 version only the renderer based on [Flying Saucer](http://code.google.com/p/flying-saucer/) is available.
 
+## Issues
+
+You can log any issue in the [dedicated section](https://github.com/allcolor/YaHP-Converter/issues).
+
 ## Contact
 
 Please contact the creator of YAHP at <quentin.anciaux@advalvas.be> if you have any question.
