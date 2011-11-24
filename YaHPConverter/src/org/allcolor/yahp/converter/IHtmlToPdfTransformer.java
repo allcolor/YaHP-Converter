@@ -889,7 +889,7 @@ public interface IHtmlToPdfTransformer {
 	public static final String USE_PDF_SIGNING = "yahp.USE_PDF_SIGNING";
 
 	/** YaHP Converter version */
-	public static final String VERSION = "YaHP Converter v1.2.20c §20110510";
+	public static final String VERSION = "YaHP Converter v1.3 §20111121";
 
 	/**
 	 * Transform the html document in the inputstream to a pdf in the
